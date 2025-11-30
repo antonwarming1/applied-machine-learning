@@ -3,17 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, precision_recall_fscore_support, roc_auc_score
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_recall_fscore_support
 import requests
 from io import StringIO
 import urllib3
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import KFold, StratifiedKFold
-from sklearn.ensemble import RandomForestClassifier
 import optuna
-from sklearn.preprocessing import OneHotEncoder 
 from sklearn.preprocessing import StandardScaler
 import torch
 import torch.nn as nn
