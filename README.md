@@ -106,5 +106,6 @@ requests
 urllib3
 scipy
 
-## Time
+### Time
+
 As the gridsearch is done for 3 different algorimts in binary classification and for 1 algoritme in multi class, the code does take some time to run. For the multiclass if an nvidia GPU is avilible it can be used to make it alot faster.
