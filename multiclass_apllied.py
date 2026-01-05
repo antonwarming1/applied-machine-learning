@@ -363,7 +363,7 @@ def main():
     
     # Plot confusion matrix
     plot_confusion_matrix(cm, class_names=class_names, title=f' Optuna Optimized (Val Acc: {accuracy})')
-    3# Plot normalized confusion matrix
+    # Plot normalized confusion matrix
     plot_confusion_matrix(cm_normalized, class_names=class_names, title=f'Optuna Optimized Normalized (Val Acc: {accuracy})')
     
     print("\n=== FINAL BEST HYPERPARAMETERS ===")
