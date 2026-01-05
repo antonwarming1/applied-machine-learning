@@ -3,19 +3,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_recall_fscore_support
 import requests
 from io import StringIO
 import urllib3
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
-from scipy.stats import randint
+
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
-from APPLIED-MACHINE-LEARNING.binary_model_applied import plot_confusion_matrix, plot_confusion_matrix_normalized
+from binary_model_applied import plot_confusion_matrix, plot_confusion_matrix_normalized
 # Download the data
 url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00198/Faults.NNA"
 response = requests.get(url, verify=False)  # Bypass SSL verification
@@ -105,7 +104,7 @@ def train_logistic_regression(x_train, y_train, x_test, y_test):
     return model, y_pred
 
 def train_svm(x_train, y_train, x_test, y_test):
-    model = SVC(kernel='rbf', random_state=42)
+    model = SVC(kernel='linear', random_state=42,C=2.0)
     model.fit(x_train, y_train)
     y_pred = model.predict(x_test)
     accuracy = accuracy_score(y_test, y_pred)
