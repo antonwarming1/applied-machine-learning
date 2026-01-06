@@ -15,6 +15,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from binary_model_applied import plot_confusion_matrix, plot_confusion_matrix_normalized
+
 # Download the data
 url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00198/Faults.NNA"
 response = requests.get(url, verify=False)  # Bypass SSL verification
@@ -104,7 +105,7 @@ def train_logistic_regression(x_train, y_train, x_test, y_test):
     return model, y_pred
 
 def train_svm(x_train, y_train, x_test, y_test):
-    model = SVC(kernel='linear', random_state=42,C=2.0)
+    model = SVC(kernel='rbf', random_state=42,C=2,gamma='scale')
     model.fit(x_train, y_train)
     y_pred = model.predict(x_test)
     accuracy = accuracy_score(y_test, y_pred)
@@ -112,14 +113,26 @@ def train_svm(x_train, y_train, x_test, y_test):
     return model, y_pred
 
 def evaluate_model(model, x_test, y_test):
+    
     y_pred = model.predict(x_test)
     accuracy = accuracy_score(y_test, y_pred)
-    precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='binary')
+    precision, recall, f1, support = precision_recall_fscore_support(y_test, y_pred)
     
-    print(f"Accuracy: {accuracy}")
-    print(f"Precision: {precision}")
-    print(f"Recall: {recall}")
-    print(f"F1 Score: {f1}")
+    print(f"\n=== Model Evaluation ===")
+    print(f"Accuracy: {accuracy:.4f}")
+    
+    print(f"\nClass 0 (Other Faults):")
+    print(f"  Precision: {precision[0]:.4f}")
+    print(f"  Recall: {recall[0]:.4f}")
+    print(f"  F1-Score: {f1[0]:.4f}")
+    print(f"  Support: {support[0]}")
+    
+    print(f"\nClass 1 (Stains, Dirtiness and Pastry):")
+    print(f"  Precision: {precision[1]:.4f}")
+    print(f"  Recall: {recall[1]:.4f}")
+    print(f"  F1-Score: {f1[1]:.4f}")
+    print(f"  Support: {support[1]}")
+    
     cm = confusion_matrix(y_test, y_pred)
     return cm
 

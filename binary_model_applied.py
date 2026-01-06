@@ -280,7 +280,9 @@ def plot_confusion_matrix(y_true, y_pred, title):
     cm = confusion_matrix(y_true, y_pred)
     
     plt.figure(figsize=(6, 4))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=['Other Faults', 'Stains/Dirtiness/Pastry'],
+                yticklabels=['Other Faults', 'Stains/Dirtiness/Pastry'])
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
     plt.title(title)
@@ -290,7 +292,9 @@ def plot_confusion_matrix_normalized(y_true, y_pred, title):
     # Plot normalized confusion matrix
     cm_normalized=confusion_matrix(y_true, y_pred, normalize='true')
     plt.figure(figsize=(6, 4))
-    sns.heatmap(cm_normalized, annot=True, fmt='.2f', cmap='Blues')
+    sns.heatmap(cm_normalized, annot=True, fmt='.2f', cmap='Blues',
+                xticklabels=['Other Faults', 'Stains/Dirtiness/Pastry'],
+                yticklabels=['Other Faults', 'Stains/Dirtiness/Pastry'])
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
     plt.title(title)
