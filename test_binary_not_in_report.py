@@ -56,6 +56,31 @@ df['target'] = np.where(df[surface_faults].any(axis=1), 1, 0)
 # Drop the individual fault columns
 df = df.drop(columns=surface_faults + other_faults)
 
+plt.rc('font', size=1)          # Base font size
+plt.rc('axes', labelsize=12, titlesize=5)  # Axis labels and titles
+plt.rc('legend', fontsize=10)    # Legend text
+plt.rc('xtick', labelsize=9)     # X-axis tick labels
+plt.rc('ytick', labelsize=9)     # Y-axis tick labels
+
+# Create histogram with more spacing between subplots
+df.hist(bins=50, figsize=(20, 20))
+plt.subplots_adjust(hspace=0.4, wspace=0.4)  # Add horizontal and vertical spacing
+plt.show()
+
+plt.rcdefaults()
+
+
+#correlation matrix
+cor_matrix = df.corr()
+print(cor_matrix["target"].sort_values(ascending=False))
+plt.figure(figsize=(12, 8))
+sns.heatmap(cor_matrix, annot=True, fmt=".2f", cmap='coolwarm', cbar=True)
+plt.title('Correlation Matrix')
+plt.show()
+
+
+
+
 # Data Exploration
 print(df.head(10))
 #print(df.info())
@@ -92,6 +117,7 @@ y = df['target']
 # duo to very imbalanced dataset, we use stratify
 
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
 
 def train_base_models():
     #Train base Decision Tree and Random Forest models with default parameters. Only used for test and quick comparison.

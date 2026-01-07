@@ -26,7 +26,6 @@ data = StringIO(response.text)
 
 # Read the data into a pandas DataFrame
 df = pd.read_csv(data, sep=r"\s+", header=None)
-print(df.head())
 print(f"data shape: {df.shape}")
 # Assign column names
 column_names = [
@@ -61,9 +60,9 @@ df = df.drop(columns=fault_types)
 
 
 # Data Exploration
-#print(df.head(10))
-#print(f'info:{df.info()}')
-#print(df.describe())
+print(df.head(10))
+print(f'info:{df.info()}')
+print(df.describe())
 
 
 # Visualize the distribution of fault types

@@ -155,7 +155,6 @@ def main():
     print("SVM Confusion Matrix:")
     print(svm_cm)
 
-    class_names = ['Other Faults', 'Stains/Dirtiness/Pastry']
 
     # Plot confusion matrices for Logistic Regression
     plot_confusion_matrix(y_test, lr_y_pred, title='Logistic Regression Confusion Matrix')
