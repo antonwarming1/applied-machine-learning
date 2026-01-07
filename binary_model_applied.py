@@ -50,7 +50,7 @@ other_faults = ['Z_Scratch', 'K_Scatch', 'Bumps', 'Other_Faults']
 print(f"\nTotal Surface Faults (Stains + Dirtiness): {df[surface_faults].sum().sum()}")
 print(f"Total Other Faults: {df[other_faults].sum().sum()}")
 
-# Binary target: 1 = Stains/Dirtiness, 0 = Other faults
+# Binary target: 1 = Stains/Dirtiness/pastry, 0 = Other faults
 df['target'] = np.where(df[surface_faults].any(axis=1), 1, 0)
 
 # Drop the individual fault columns

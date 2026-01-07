@@ -7,9 +7,8 @@ from sklearn.metrics import accuracy_score, confusion_matrix, precision_recall_f
 import requests
 from io import StringIO
 import urllib3
-from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.metrics import PrecisionRecallDisplay
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from sklearn.linear_model import LogisticRegression
@@ -96,12 +95,13 @@ scaler=StandardScaler()
 x_train=scaler.fit_transform(x_train)
 x_test=scaler.transform(x_test)
 
-def train_logistic_regression(x_train, y_train, x_test, y_test):
+def train_logistic_regression(x_train, y_train, x_test, y_test, threshold=0.2):
     model = LogisticRegression(max_iter=1000, random_state=42)
     model.fit(x_train, y_train)
-    y_pred = model.predict(x_test)
+    y_proba = model.predict_proba(x_test)[:, 1]
+    y_pred = (y_proba >= threshold).astype(int)
     accuracy = accuracy_score(y_test, y_pred)
-    print(f"Logistic Regression Accuracy: {accuracy}")
+    print(f"Logistic Regression Accuracy (threshold={threshold}): {accuracy}")
     return model, y_pred
 
 def train_svm(x_train, y_train, x_test, y_test):
@@ -132,7 +132,10 @@ def evaluate_model(model, x_test, y_test):
     print(f"  Recall: {recall[1]:.4f}")
     print(f"  F1-Score: {f1[1]:.4f}")
     print(f"  Support: {support[1]}")
-    
+    #plot PR curve
+    PrecisionRecallDisplay.from_estimator(model, x_test, y_test)
+    plt.show()
+
     cm = confusion_matrix(y_test, y_pred)
     return cm
 
