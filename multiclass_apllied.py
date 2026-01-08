@@ -107,6 +107,7 @@ y_val = torch.from_numpy(y_val).type(torch.long)
 
 if torch.cuda.is_available():
     device = "cuda"
+    print(f"Using device: {torch.cuda.get_device_name(0)}")
 else:
     device = "cpu"
 # Model parameters global

@@ -228,7 +228,7 @@ def bayesian_optimization(model_type='tree'):
     # Perform Bayesian Optimization for hyperparameter tuning using Optuna
     optuna.logging.set_verbosity(optuna.logging.WARNING)
     # create study and set direction to maximize accuracy
-    study = optuna.create_study(direction='maximize')
+    study = optuna.create_study(direction='maximize',sampler=optuna.samplers.TPESampler(seed=42))
     study.optimize(lambda trial: objective(trial, model_type), n_trials=50)
     
     return study.best_params, study.best_value
