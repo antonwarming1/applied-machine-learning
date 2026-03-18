@@ -13,6 +13,7 @@ import torch
 import torch.nn as nn
 import copy
 from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import f1_score
 
 
 
@@ -149,6 +150,7 @@ def standard_model():
     # Define model dimensions
     hidden_features = 550
     num_hidden_layers = 2
+    torch.manual_seed(42)
 
 
     # setup model_0
@@ -199,7 +201,7 @@ def train_model(model, x_train, y_train, x_val, y_val, loss_fn, optimizer, epoch
             epochs_no_improve += 1
         #print progress every 10 epochs
         if epoch % 10 == 0:
-            print(f"Epoch [{epoch}/{epochs}], Train Loss: {train_loss.item():.4f}, Val Loss: {val_loss.item():.4f}, Val Acc: {val_acc:.4f}")
+            print(f"Epoch [{epoch}/{epochs}], Train Loss: {train_loss.item():.4f}, Val Loss: {val_loss.item():.4f}, Val Acc: {val_acc:.4f}" )
         
         # Stop if no improvement for 'patience' epochs
         if epochs_no_improve >= patience:
@@ -211,7 +213,6 @@ def train_model(model, x_train, y_train, x_val, y_val, loss_fn, optimizer, epoch
 
 def objective(trial):
     #Optuna objective function for PyTorch neural network hyperparameter optimization
-    
     # Select hyperparameters to tune
     hidden_dim = trial.suggest_int("hidden_dim", 64, 512)
     num_layers = trial.suggest_int("num_layers", 2, 5)
@@ -248,10 +249,12 @@ def objective(trial):
     y_true = y_val.cpu().numpy()
     y_pred = preds.cpu().numpy()
     # Calculate accuracy
-    val_acc = accuracy_score(y_true, y_pred)
     
+    #val_acc = accuracy_score(y_true, y_pred)
+    val_f1 = f1_score(y_true, y_pred, average='macro')
     # We want to maximize accuracy, so we return it directly
-    return val_acc
+    #return val_acc
+    return val_f1
 
 def run_optuna_optimization(n_trials=100):
     # Run Optuna optimization for PyTorch neural network hyperparameters
@@ -264,7 +267,7 @@ def run_optuna_optimization(n_trials=100):
     
     print(f"\n=== OPTIMIZATION COMPLETE ===")
     print(f"Best trial: {study.best_trial.number}")
-    print(f"Best validation accuracy: {study.best_value}")
+    print(f"Best validation F1 score (macro): {study.best_value:.4f}")
     print(f"\nBest hyperparameters:")
     for key, value in study.best_params.items():
         print(f"  {key}: {value}")
@@ -352,7 +355,7 @@ def plot_confusion_matrix(cm, class_names=None, title='Confusion Matrix'):
 
 def main():
     # Run Optuna optimization
-    best_model, best_params = run_optuna_optimization(n_trials=100)
+    best_model, best_params = run_optuna_optimization(n_trials=1)
     
     # Evaluate on validation set
     print("\n=== EVALUATING ON VALIDATION SET ===")
@@ -370,6 +373,7 @@ def main():
     for key, value in best_params.items():
         print(f"{key}: {value}")
     # Train and evaluate a standard model for comparison
+    print("\n=== TRAINING AND EVALUATING STANDARD MODEL ===")
     model_0 = standard_model()
     # Setup loss function 
     loss_fn = nn.CrossEntropyLoss()
